@@ -9,9 +9,12 @@ public class Driver {
 		User employee = new Employee(2, "employeeUsername", "employeePassword", "Employee-Name", "Employeeson", "employee@bank.com");
 		User standard = new Standard(3, "standardUsername", "standardPassword", "Standard-Name", "Standardson", "standard@client.com");
 		
-		System.out.println(admin.username + " is a(n) " + admin.role);
-		System.out.println(employee.username + " is a(n) " + employee.role);
-		System.out.println(standard.username + " is a(n) " + standard.role);
+		System.out.println(admin.getUsername() + " is a(n) " + admin.role);
+		System.out.println(employee.getUsername() + " is a(n) " + employee.role);
+		System.out.println(standard.getUsername() + " is a(n) " + standard.role);
+		
+		admin.setUsername("NewAdminUsername");
+		System.out.println(admin.getUsername());
 
 	}
 

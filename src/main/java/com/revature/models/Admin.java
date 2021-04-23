@@ -13,4 +13,7 @@ public class Admin extends User {
 		this.roleID = 1;
 		this.role = "Admin";
 	}
+	
+
+	
 }
