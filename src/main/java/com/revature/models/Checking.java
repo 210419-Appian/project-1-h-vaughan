@@ -18,7 +18,7 @@ public class Checking extends Account {
 	public String withdraw(int accountID, double amount) {
 		try {
 			if (amount > this.balance) {
-				throw new BalanceBelowZero("You do not have enough funds in Checking Account #" + accountID);
+				throw new BalanceBelowZero("You do not have enough funds in Checking Account #" + accountID + " to withdraw. Please try again.");
 			}
 			else {
 				this.balance = this.balance - amount;

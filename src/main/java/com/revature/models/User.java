@@ -5,7 +5,6 @@ import java.util.HashMap;
 public abstract class User {
 	
 	public int userID; // primary key
-	public static int nextID = 1;
 	private String username; // not null, unique
 	private String password; // not null
 	private String firstName; // not null
@@ -22,8 +21,13 @@ public abstract class User {
 	
 	public User(String username, String password, String firstName, String lastName, String email) {
 		super();
-		this.userID = nextID;
-		nextID += 1;
+		
+		int IDcount = 1; //In theory, this should make sure that no user has the same ID
+		while (users.containsKey(IDcount) == true) {
+			IDcount++;
+		}
+		this.userID = IDcount;
+		
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
