@@ -33,6 +33,17 @@ public class Driver {
 		System.out.println(mySavings.deposit(mySavings.accountID, 34.23));
 		
 		System.out.println(myChecking.transfer(myChecking.accountID, mySavings.accountID, 64839.23));
+		System.out.println(myChecking.balance);
+		System.out.println(myChecking.transfer(myChecking.accountID, mySavings.accountID, 39.23));
+		System.out.println(myChecking.balance);
+		
+		System.out.println("======================Collections======================");
+		System.out.println(Account.accounts);
+		System.out.println(Account.accounts.get(myChecking.accountID).balance);
+		System.out.println(Account.accounts.get(mySavings.accountID).balance);
+		myChecking.transfer(myChecking.accountID, mySavings.accountID, 30000);
+		System.out.println(Account.accounts.get(myChecking.accountID).balance);
+		System.out.println(Account.accounts.get(mySavings.accountID).balance);
 	}
 
 }
