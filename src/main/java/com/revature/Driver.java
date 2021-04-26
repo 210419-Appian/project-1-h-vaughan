@@ -26,7 +26,13 @@ public class Driver {
 		System.out.println("I have $" + myChecking.balance + " in my " + myChecking.accountType + " account.");
 		System.out.println("I have $" + mySavings.balance + " in my " + mySavings.accountType + " account.");
 		
+		System.out.println(myChecking.withdraw(myChecking.accountID, 400.83));
+		System.out.println(mySavings.withdraw(mySavings.accountID, 6375230.75));
 		
+		System.out.println(myChecking.deposit(myChecking.accountID, 38920.34));
+		System.out.println(mySavings.deposit(mySavings.accountID, 34.23));
+		
+		System.out.println(myChecking.transfer(myChecking.accountID, mySavings.accountID, 64839.23));
 	}
 
 }
