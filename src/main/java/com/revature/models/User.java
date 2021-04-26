@@ -1,13 +1,17 @@
 package com.revature.models;
 
+import java.util.HashMap;
+
 public abstract class User {
 	
 	public int userID; // primary key
+	public static int nextID = 1;
 	private String username; // not null, unique
 	private String password; // not null
 	private String firstName; // not null
 	private String lastName; // not null
 	private String email; // not null
+	public static HashMap<Integer, User> users = new HashMap<Integer, User>();
 	
 	public int roleID; // primary key
 	public String role; // not null, unique
@@ -16,14 +20,17 @@ public abstract class User {
 		super();
 	}
 	
-	public User(int userID, String username, String password, String firstName, String lastName, String email) {
+	public User(String username, String password, String firstName, String lastName, String email) {
 		super();
-		this.userID = userID;
+		this.userID = nextID;
+		nextID += 1;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		
+		users.put(this.userID, this);
 	}
 	
 	

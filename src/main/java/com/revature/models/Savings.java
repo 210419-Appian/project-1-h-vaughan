@@ -8,8 +8,8 @@ public class Savings extends Account{
 		super();
 	}
 
-	public Savings(int accountID, double balance, String status) {
-		super(accountID, balance, status);
+	public Savings(double balance, String status) {
+		super(balance, status);
 		this.accountType = "Savings";
 	}
 	

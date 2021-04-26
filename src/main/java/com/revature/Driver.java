@@ -6,9 +6,9 @@ public class Driver {
 
 	public static void main(String[] args) {
 		System.out.println("======================Users======================");
-		User admin = new Admin(1, "adminUsername", "adminPassword", "Admin-Name", "Adminson", "admin@bank.com");
-		User employee = new Employee(2, "employeeUsername", "employeePassword", "Employee-Name", "Employeeson", "employee@bank.com");
-		User standard = new Standard(3, "standardUsername", "standardPassword", "Standard-Name", "Standardson", "standard@client.com");
+		User admin = new Admin("adminUsername", "adminPassword", "Admin-Name", "Adminson", "admin@bank.com");
+		User employee = new Employee("employeeUsername", "employeePassword", "Employee-Name", "Employeeson", "employee@bank.com");
+		User standard = new Standard("standardUsername", "standardPassword", "Standard-Name", "Standardson", "standard@client.com");
 		
 		System.out.println(admin.getUsername() + " is a(n) " + admin.role);
 		System.out.println(employee.getUsername() + " is a(n) " + employee.role);
@@ -20,8 +20,8 @@ public class Driver {
 		
 		System.out.println("======================Accounts======================");
 		
-		Account myChecking = new Checking(1, 842.24, "Open");
-		Account mySavings = new Savings(2, 320578.25, "Closed");
+		Account myChecking = new Checking(842.24, "Open");
+		Account mySavings = new Savings(320578.25, "Closed");
 		
 		System.out.println("I have $" + myChecking.balance + " in my " + myChecking.accountType + " account.");
 		System.out.println("I have $" + mySavings.balance + " in my " + mySavings.accountType + " account.");
@@ -37,13 +37,20 @@ public class Driver {
 		System.out.println(myChecking.transfer(myChecking.accountID, mySavings.accountID, 39.23));
 		System.out.println(myChecking.balance);
 		
+		
 		System.out.println("======================Collections======================");
 		System.out.println(Account.accounts);
+		System.out.println(User.users);
+		
 		System.out.println(Account.accounts.get(myChecking.accountID).balance);
 		System.out.println(Account.accounts.get(mySavings.accountID).balance);
 		myChecking.transfer(myChecking.accountID, mySavings.accountID, 30000);
 		System.out.println(Account.accounts.get(myChecking.accountID).balance);
 		System.out.println(Account.accounts.get(mySavings.accountID).balance);
+		
+		
+		System.out.println("Account #2 is a(n) " + User.users.get(2).role);
+
 	}
 
 }

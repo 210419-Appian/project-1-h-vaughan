@@ -8,8 +8,8 @@ public class Admin extends User {
 		this.role = "Admin";
 	}
 	
-	public Admin(int userID, String username, String password, String firstName, String lastName, String email) {
-		super(userID, username, password, firstName, lastName, email);
+	public Admin(String username, String password, String firstName, String lastName, String email) {
+		super(username, password, firstName, lastName, email);
 		this.roleID = 1;
 		this.role = "Admin";
 	}

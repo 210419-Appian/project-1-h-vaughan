@@ -8,8 +8,8 @@ public class Employee extends User{
 		this.role = "Employee";
 	}
 	
-	public Employee(int userID, String username, String password, String firstName, String lastName, String email) {
-		super(userID, username, password, firstName, lastName, email);
+	public Employee(String username, String password, String firstName, String lastName, String email) {
+		super(username, password, firstName, lastName, email);
 		this.roleID = 2;
 		this.role = "Employee";
 	}
