@@ -6,17 +6,18 @@ public class Driver {
 
 	public static void main(String[] args) {
 		System.out.println("======================Users======================");
+		
 		User admin = new Admin("adminUsername", "adminPassword", "Admin-Name", "Adminson", "admin@bank.com");
 		User employee = new Employee("employeeUsername", "employeePassword", "Employee-Name", "Employeeson", "employee@bank.com");
 		User standard = new Standard("standardUsername", "standardPassword", "Standard-Name", "Standardson", "standard@client.com");
 		
 		System.out.println(admin.getUsername() + " is a(n) " + admin.role);
 		System.out.println(employee.getUsername() + " is a(n) " + employee.role);
-		System.out.println(standard.getUsername() + " is a(n) " + standard.role);
+		System.out.println(standard.getUsername() + " is a(n) " + standard.role); //Getting a user's own username
 		
 		admin.setUsername("NewAdminUsername");
 		System.out.println(admin.getUsername());
-		
+				
 		
 		System.out.println("======================Accounts======================");
 		
@@ -39,6 +40,7 @@ public class Driver {
 		
 		
 		System.out.println("======================Collections======================");
+		
 		System.out.println(Account.accounts);
 		System.out.println(User.users);
 		
@@ -50,7 +52,17 @@ public class Driver {
 		
 		
 		System.out.println("Account #2 is a(n) " + User.users.get(2).role);
-
+		
+		
+		System.out.println("======================SecurityCheck======================");
+		
+		System.out.println("Admin access's User #3's username: " + admin.getUsername(3)); //Getting a particular user's username
+		System.out.println("Employee access's User #3's username: " + employee.getUsername(3)); //Getting a particular user's username
+		System.out.println("Standard user access's User #3's username: " + standard.getUsername(3)); //Getting a particular user's username
+		
+		System.out.println(admin.getAllInformation(3));
+		System.out.println(employee.getAllInformation(1));
+		System.out.println(standard.getAllInformation(3));
 	}
 
 }

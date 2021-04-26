@@ -2,6 +2,8 @@ package com.revature.models;
 
 import java.util.HashMap;
 
+import com.revature.throwables.SecurityCheck;
+
 public abstract class User {
 	
 	public int userID; // primary key
@@ -50,21 +52,21 @@ public abstract class User {
 		return this.username;
 	}
 	
-	public String getUsername(int userID) {
-		if (this.roleID == 1) {
-			//User is an admin and can view any information
-			return userID + "test";
+	public String getUsername(int targetUserID) {
+		try {
+			if(this.roleID == 1 || this.roleID == 2) {
+				return users.get(targetUserID).username;
+			}
+			else {
+				throw new SecurityCheck("You do not have permission to view this information.");
+			}
 		}
-		else if (this.roleID == 2) {
-			//User is an employee and can view any information
-			return userID + "test";
+		catch(SecurityCheck e) {
+			e.printStackTrace();
 		}
-		else {
-			//User is not an admin nor an employee, and should only be able to view their own information
-			return "You do not have permission to view this information.";
-		}
+		return null;
 	}
-	
+
 	
 	
 	public void setPassword(String newPassword) {
@@ -78,19 +80,19 @@ public abstract class User {
 		return this.password;
 	}
 	
-	public String getPassword(int userID) {
-		if (this.roleID == 1) {
-			//User is an admin and can view any information
-			return userID + "test";
+	public String getPassword(int targetUserID) {
+		try {
+			if(this.roleID == 1 || this.roleID == 2) {
+				return users.get(targetUserID).password;
+			}
+			else {
+				throw new SecurityCheck("You do not have permission to view this information.");
+			}
 		}
-		else if (this.roleID == 2) {
-			//User is an employee and can view any information
-			return userID + "test";
+		catch(SecurityCheck e) {
+			e.printStackTrace();
 		}
-		else {
-			//User is not an admin nor an employee, and should only be able to view their own information
-			return "You do not have permission to view this information.";
-		}
+		return null;
 	}
 	
 	
@@ -106,19 +108,19 @@ public abstract class User {
 		return this.firstName;
 	}
 	
-	public String getFirstName(int userID) {
-		if (this.roleID == 1) {
-			//User is an admin and can view any information
-			return userID + "test";
+	public String getFirstName(int targetUserID) {
+		try {
+			if(this.roleID == 1 || this.roleID == 2) {
+				return users.get(targetUserID).firstName;
+			}
+			else {
+				throw new SecurityCheck("You do not have permission to view this information.");
+			}
 		}
-		else if (this.roleID == 2) {
-			//User is an employee and can view any information
-			return userID + "test";
+		catch(SecurityCheck e) {
+			e.printStackTrace();
 		}
-		else {
-			//User is not an admin nor an employee, and should only be able to view their own information
-			return "You do not have permission to view this information.";
-		}
+		return null;
 	}
 	
 	
@@ -134,19 +136,19 @@ public abstract class User {
 		return this.lastName;
 	}
 	
-	public String getLastName(int userID) {
-		if (this.roleID == 1) {
-			//User is an admin and can view any information
-			return userID + "test";
+	public String getLastName(int targetUserID) {
+		try {
+			if(this.roleID == 1 || this.roleID == 2) {
+				return users.get(targetUserID).lastName;
+			}
+			else {
+				throw new SecurityCheck("You do not have permission to view this information.");
+			}
 		}
-		else if (this.roleID == 2) {
-			//User is an employee and can view any information
-			return userID + "test";
+		catch(SecurityCheck e) {
+			e.printStackTrace();
 		}
-		else {
-			//User is not an admin nor an employee, and should only be able to view their own information
-			return "You do not have permission to view this information.";
-		}
+		return null;
 	}
 	
 	
@@ -162,20 +164,30 @@ public abstract class User {
 		return this.email;
 	}
 	
-	public String getEmail(int userID) {
-		if (this.roleID == 1) {
-			//User is an admin and can view any information
-			return userID + "test";
+	public String getEmail(int targetUserID) {
+		try {
+			if(this.roleID == 1 || this.roleID == 2) {
+				return users.get(targetUserID).email;
+			}
+			else {
+				throw new SecurityCheck("You do not have permission to view this information.");
+			}
 		}
-		else if (this.roleID == 2) {
-			//User is an employee and can view any information
-			return userID + "test";
+		catch(SecurityCheck e) {
+			e.printStackTrace();
 		}
-		else {
-			//User is not an admin nor an employee, and should only be able to view their own information
-			return "You do not have permission to view this information.";
-		}
+		return null;
 	}
 	
+	
+	
+	public String getAllInformation(int targetUserID) {
+		String targetUsername = getUsername(targetUserID);
+		String targetPassword = getPassword(targetUserID);
+		String targetFirstName = getFirstName(targetUserID);
+		String targetLastName = getLastName(targetUserID);
+		String targetEmail = getEmail(targetUserID);
+		return "User #" + targetUserID + "\n" + "Username: " + targetUsername + "\n" + "Password: " + targetPassword + "\n" + "Name: " + targetFirstName + " " + targetLastName + "\n" + "Email: " + targetEmail;
+	}
 	
 }
