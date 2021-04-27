@@ -3,6 +3,7 @@ package com.revature.models;
 import java.util.HashMap;
 
 import com.revature.throwables.SecurityCheck;
+import com.revature.throwables.UserMisinput;
 
 public abstract class User {
 	
@@ -12,6 +13,7 @@ public abstract class User {
 	private String firstName; // not null
 	private String lastName; // not null
 	private String email; // not null
+	
 	public static HashMap<Integer, User> users = new HashMap<Integer, User>();
 	
 	public int roleID; // primary key
@@ -30,11 +32,11 @@ public abstract class User {
 		}
 		this.userID = IDcount;
 		
-		this.username = username;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
+		setUsername(username);
+		setPassword(password);
+		setFirstName(firstName);
+		setLastName(lastName);
+		setEmail(email);
 		
 		users.put(this.userID, this);
 	}
@@ -43,8 +45,20 @@ public abstract class User {
 	
 	public void setUsername(String newUsername) {
 		//All users must be able to update their username!
-		
-		this.username = newUsername; //Add some functionality to make sure not null and unique
+		try {
+			boolean isValid = true;
+			for(char letter : newUsername.toCharArray()) {
+				if(!AllowedCharacters.allowedCharactersUsername.contains(letter) || newUsername == null) {
+					isValid = false;
+					throw new UserMisinput("Please enter a valid username");
+				}
+			}
+			if(isValid) {
+				this.username = newUsername;
+			}
+		}catch(UserMisinput e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getUsername() {
@@ -71,8 +85,20 @@ public abstract class User {
 	
 	public void setPassword(String newPassword) {
 		//All users must be able to update their password!
-		
-		this.password = newPassword; //Add some functionality to make sure not null
+		try {
+			boolean isValid = true;
+			for(char letter : newPassword.toCharArray()) {
+				if(!AllowedCharacters.allowedCharactersPassword.contains(letter) || newPassword == null) {
+					isValid = false;
+					throw new UserMisinput("Please enter a valid password");
+				}
+			}
+			if(isValid) {
+				this.password = newPassword;
+			}
+		}catch(UserMisinput e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getPassword() {
@@ -99,8 +125,20 @@ public abstract class User {
 	
 	public void setFirstName(String newFirstName) {
 		//All users must be able to update their first name!
-		
-		this.firstName = newFirstName; //Add some functionality to make sure not null
+		try {
+			boolean isValid = true;
+			for(char letter : newFirstName.toCharArray()) {
+				if(!AllowedCharacters.allowedCharactersFirst.contains(letter) || newFirstName == null) {
+					isValid = false;
+					throw new UserMisinput("Please enter a valid name");
+				}
+			}
+			if(isValid) {
+				this.firstName = newFirstName;
+			}
+		}catch(UserMisinput e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getFirstName() {
@@ -127,8 +165,20 @@ public abstract class User {
 	
 	public void setLastName(String newLastName) {
 		//All users must be able to update their last name!
-		
-		this.lastName = newLastName; //Add some functionality to make sure not null
+		try {
+			boolean isValid = true;
+			for(char letter : newLastName.toCharArray()) {
+				if(!AllowedCharacters.allowedCharactersLast.contains(letter) || newLastName == null) {
+					isValid = false;
+					throw new UserMisinput("Please enter a valid name");
+				}
+			}
+			if(isValid) {
+				this.lastName = newLastName;
+			}
+		}catch(UserMisinput e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getLastName() {
@@ -155,8 +205,20 @@ public abstract class User {
 	
 	public void setEmail(String newEmail) {
 		//All users must be able to update their email!
-		
-		this.email = newEmail; //Add some functionality to make sure not null
+		try {
+			boolean isValid = true;
+			for(char letter : newEmail.toCharArray()) {
+				if(!AllowedCharacters.allowedCharactersEmail.contains(letter) || newEmail == null) {
+					isValid = false;
+					throw new UserMisinput("Please enter a valid email");
+				}
+			}
+			if(isValid) {
+				this.email = newEmail;
+			}
+		}catch(UserMisinput e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getEmail() {

@@ -63,6 +63,39 @@ public class Driver {
 		System.out.println(admin.getAllInformation(3));
 		System.out.println(employee.getAllInformation(1));
 		System.out.println(standard.getAllInformation(3));
+		
+		System.out.println("======================AllowedCharacters======================");
+		
+		System.out.println("Username: " + standard.getUsername());
+		standard.setUsername("This-Is-A-Valid_UsErN@m3");
+		System.out.println("Username: " + standard.getUsername());
+		standard.setUsername("t#is !S N0T==@= v@l1D username");
+		System.out.println("Username: " + standard.getUsername());
+		
+		System.out.println("Password: " + standard.getPassword());
+		standard.setPassword("Valid");
+		System.out.println("Password: " + standard.getPassword());
+		standard.setPassword("1nvalid pword");
+		System.out.println("Password: " + standard.getPassword());
+		
+		System.out.println("First Name: " + standard.getFirstName());
+		standard.setFirstName("Valid");
+		System.out.println("First Name: " + standard.getFirstName());
+		standard.setFirstName("1nvalid");
+		System.out.println("First Name: " + standard.getFirstName());
+		
+		System.out.println("Last Name: " + standard.getLastName());
+		standard.setLastName("Valid");
+		System.out.println("Last Name: " + standard.getLastName());
+		standard.setLastName("1nvalid");
+		System.out.println("Last Name: " + standard.getLastName());
+		
+		System.out.println("Email: " + standard.getEmail());
+		standard.setEmail("Valid@djsifo.com");
+		System.out.println("Email: " + standard.getEmail());
+		standard.setEmail("1nvalid at dkjfsak dot com");
+		System.out.println("Email: " + standard.getEmail());
+		
 	}
 
 }
