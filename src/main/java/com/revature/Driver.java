@@ -1,100 +1,93 @@
 package com.revature;
 
-import com.revature.models.*;
+import java.util.List;
+
+import com.revature.daos.AccountDAOImpl;
+import com.revature.daos.UserDAOImpl;
+import com.revature.models.Account;
+import com.revature.models.User;
+import com.revature.services.AccountServices;
 
 public class Driver {
 
 	public static void main(String[] args) {
-		System.out.println("======================Users======================");
 		
-		User admin = new Admin("adminUsername", "adminPassword", "Admin-Name", "Adminson", "admin@bank.com");
-		User employee = new Employee("employeeUsername", "employeePassword", "Employee-Name", "Employeeson", "employee@bank.com");
-		User standard = new Standard("standardUsername", "standardPassword", "Standard-Name", "Standardson", "standard@client.com");
+		User myUser = new User();
 		
-		System.out.println(admin.getUsername() + " is a(n) " + admin.role);
-		System.out.println(employee.getUsername() + " is a(n) " + employee.role);
-		System.out.println(standard.getUsername() + " is a(n) " + standard.role); //Getting a user's own username
+		System.out.println("================================Getters&Setters================================");
 		
-		admin.setUsername("NewAdminUsername");
-		System.out.println(admin.getUsername());
-				
+		System.out.println(myUser.getUsername());
+		myUser.setUsername("aValidUsername");
+		System.out.println(myUser.getUsername());
+		myUser.setUsername("NOT21314$215^& (@ FNVIALID EUSNFEMA0921-4398");
+		System.out.println(myUser.getUsername());
 		
-		System.out.println("======================Accounts======================");
+		System.out.println(myUser.getPassword());
+		myUser.setPassword("validPa$$Q0rd");
+		System.out.println(myUser.getPassword());
+		myUser.setPassword("NOT (@ FNVIALID EUSNFEMA0921-4398");
+		System.out.println(myUser.getPassword());
 		
-		Account myChecking = new Checking(842.24, "Open");
-		Account mySavings = new Savings(320578.25, "Closed");
+		System.out.println("================================AccountServices================================");
 		
-		System.out.println("I have $" + myChecking.balance + " in my " + myChecking.accountType + " account.");
-		System.out.println("I have $" + mySavings.balance + " in my " + mySavings.accountType + " account.");
+		AccountServices aServices = new AccountServices();
 		
-		System.out.println(myChecking.withdraw(myChecking.accountID, 400.83));
-		System.out.println(mySavings.withdraw(mySavings.accountID, 6375230.75));
+		Account myAccount = new Account();
 		
-		System.out.println(myChecking.deposit(myChecking.accountID, 38920.34));
-		System.out.println(mySavings.deposit(mySavings.accountID, 34.23));
+		System.out.println(myAccount.getBalance());
+		myAccount.setBalance(20.34);
+		System.out.println(myAccount.getBalance());
+		aServices.withdraw(myAccount, 8.23);
+		System.out.println(myAccount.getBalance());
+		aServices.withdraw(myAccount, 12.12);
+		System.out.println(myAccount.getBalance());
 		
-		System.out.println(myChecking.transfer(myChecking.accountID, mySavings.accountID, 64839.23));
-		System.out.println(myChecking.balance);
-		System.out.println(myChecking.transfer(myChecking.accountID, mySavings.accountID, 39.23));
-		System.out.println(myChecking.balance);
+		Account myAccount2 = new Account();
+		
+		myAccount2.setBalance(10.00);
+		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
+		aServices.transfer(myAccount, myAccount2, 9.54);
+		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
+		aServices.transfer(myAccount, myAccount2, 9.54);
+		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
+		
+		System.out.println("================================DatabaseConnectivity================================");
+		
+		UserDAOImpl uDao = new UserDAOImpl();
+		
+		List<User> list = uDao.findAll();
+		
+		for(User u : list) {
+			System.out.println(u);
+		}
+		
+		System.out.println(uDao.findByUsername("standardUsername"));
+		System.out.println(uDao.findByUsername("adminUsername"));
+		System.out.println(uDao.findByUsername("employeeUsername"));
+		
+		User newJavaUser = new User("JavaUsername", "JavaPassword", "J.", "Ava", "java@oracle.com", "Standard");
+		
+		uDao.addUser(newJavaUser);
+		
+		System.out.println(uDao.findByUsername("JavaUsername"));
 		
 		
-		System.out.println("======================Collections======================");
+		AccountDAOImpl aDao = new AccountDAOImpl();
 		
-		System.out.println(Account.accounts);
-		System.out.println(User.users);
+		List<Account> list2 = aDao.findAll();
 		
-		System.out.println(Account.accounts.get(myChecking.accountID).balance);
-		System.out.println(Account.accounts.get(mySavings.accountID).balance);
-		myChecking.transfer(myChecking.accountID, mySavings.accountID, 30000);
-		System.out.println(Account.accounts.get(myChecking.accountID).balance);
-		System.out.println(Account.accounts.get(mySavings.accountID).balance);
+		for(Account a : list2) {
+			System.out.println(a);
+		}
+		
+		System.out.println(aDao.findByID(3));
+		
+		Account newAccount = new Account(9823.25, "Open", "Checking", newJavaUser);
+		
+		aDao.addAccount(newAccount);
 		
 		
-		System.out.println("Account #2 is a(n) " + User.users.get(2).role);
 		
-		
-		System.out.println("======================SecurityCheck======================");
-		
-		System.out.println("Admin access's User #3's username: " + admin.getUsername(3)); //Getting a particular user's username
-		System.out.println("Employee access's User #3's username: " + employee.getUsername(3)); //Getting a particular user's username
-		System.out.println("Standard user access's User #3's username: " + standard.getUsername(3)); //Getting a particular user's username
-		
-		System.out.println(admin.getAllInformation(3));
-		System.out.println(employee.getAllInformation(1));
-		System.out.println(standard.getAllInformation(3));
-		
-		System.out.println("======================AllowedCharacters======================");
-		
-		System.out.println("Username: " + standard.getUsername());
-		standard.setUsername("This-Is-A-Valid_UsErN@m3");
-		System.out.println("Username: " + standard.getUsername());
-		standard.setUsername("t#is !S N0T==@= v@l1D username");
-		System.out.println("Username: " + standard.getUsername());
-		
-		System.out.println("Password: " + standard.getPassword());
-		standard.setPassword("Valid");
-		System.out.println("Password: " + standard.getPassword());
-		standard.setPassword("1nvalid pword");
-		System.out.println("Password: " + standard.getPassword());
-		
-		System.out.println("First Name: " + standard.getFirstName());
-		standard.setFirstName("Valid");
-		System.out.println("First Name: " + standard.getFirstName());
-		standard.setFirstName("1nvalid");
-		System.out.println("First Name: " + standard.getFirstName());
-		
-		System.out.println("Last Name: " + standard.getLastName());
-		standard.setLastName("Valid");
-		System.out.println("Last Name: " + standard.getLastName());
-		standard.setLastName("1nvalid");
-		System.out.println("Last Name: " + standard.getLastName());
-		
-		System.out.println("Email: " + standard.getEmail());
-		standard.setEmail("Valid@djsifo.com");
-		System.out.println("Email: " + standard.getEmail());
-		standard.setEmail("1nvalid at dkjfsak dot com");
-		System.out.println("Email: " + standard.getEmail());
 		
 	}
 

@@ -1,255 +1,199 @@
 package com.revature.models;
 
-import java.util.HashMap;
-
-import com.revature.throwables.SecurityCheck;
 import com.revature.throwables.UserMisinput;
+import com.revature.util.AllowedCharacters;
 
-public abstract class User {
-	
-	public int userID; // primary key
+public class User {
+
 	private String username; // not null, unique
 	private String password; // not null
 	private String firstName; // not null
 	private String lastName; // not null
 	private String email; // not null
-	
-	public static HashMap<Integer, User> users = new HashMap<Integer, User>();
-	
-	public int roleID; // primary key
-	public String role; // not null, unique
-	
+	private String role; // not null
+
 	public User() {
 		super();
 	}
-	
-	public User(String username, String password, String firstName, String lastName, String email) {
+
+	public User(String password, String firstName, String lastName, String email,
+			String role) {
 		super();
-		
-		int IDcount = 1; //In theory, this should make sure that no user has the same ID
-		while (users.containsKey(IDcount) == true) {
-			IDcount++;
-		}
-		this.userID = IDcount;
-		
-		setUsername(username);
-		setPassword(password);
-		setFirstName(firstName);
-		setLastName(lastName);
-		setEmail(email);
-		
-		users.put(this.userID, this);
-	}
-	
-	
-	
-	public void setUsername(String newUsername) {
-		//All users must be able to update their username!
-		try {
-			boolean isValid = true;
-			for(char letter : newUsername.toCharArray()) {
-				if(!AllowedCharacters.allowedCharactersUsername.contains(letter) || newUsername == null) {
-					isValid = false;
-					throw new UserMisinput("Please enter a valid username");
-				}
-			}
-			if(isValid) {
-				this.username = newUsername;
-			}
-		}catch(UserMisinput e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public String getUsername() {
-		//All users should be able to view their own information
-		return this.username;
-	}
-	
-	public String getUsername(int targetUserID) {
-		try {
-			if(this.roleID == 1 || this.roleID == 2) {
-				return users.get(targetUserID).username;
-			}
-			else {
-				throw new SecurityCheck("You do not have permission to view this information.");
-			}
-		}
-		catch(SecurityCheck e) {
-			e.printStackTrace();
-		}
-		return null;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.role = role;
 	}
 
-	
-	
-	public void setPassword(String newPassword) {
-		//All users must be able to update their password!
+	public User(String username, String password, String firstName, String lastName, String email, String role) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.role = role;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
 		try {
-			boolean isValid = true;
-			for(char letter : newPassword.toCharArray()) {
-				if(!AllowedCharacters.allowedCharactersPassword.contains(letter) || newPassword == null) {
-					isValid = false;
-					throw new UserMisinput("Please enter a valid password");
+			for(char c : username.toCharArray())
+			{
+				if (!AllowedCharacters.allowedCharactersUsername.contains(c)) {
+					throw new UserMisinput("Invalid character: '" + c + "' Please try again~!");
 				}
 			}
-			if(isValid) {
-				this.password = newPassword;
-			}
+			this.username = username;
 		}catch(UserMisinput e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getPassword() {
-		//All users should be able to view their own information
-		return this.password;
+		return password;
 	}
-	
-	public String getPassword(int targetUserID) {
+
+	public void setPassword(String password) {
 		try {
-			if(this.roleID == 1 || this.roleID == 2) {
-				return users.get(targetUserID).password;
-			}
-			else {
-				throw new SecurityCheck("You do not have permission to view this information.");
-			}
-		}
-		catch(SecurityCheck e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	
-	
-	public void setFirstName(String newFirstName) {
-		//All users must be able to update their first name!
-		try {
-			boolean isValid = true;
-			for(char letter : newFirstName.toCharArray()) {
-				if(!AllowedCharacters.allowedCharactersFirst.contains(letter) || newFirstName == null) {
-					isValid = false;
-					throw new UserMisinput("Please enter a valid name");
+			for(char c : password.toCharArray())
+			{
+				if (!AllowedCharacters.allowedCharactersPassword.contains(c)) {
+					throw new UserMisinput("Invalid character: '" + c + "' Please try again~!");
 				}
 			}
-			if(isValid) {
-				this.firstName = newFirstName;
-			}
+			this.password = password;
 		}catch(UserMisinput e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getFirstName() {
-		//All users should be able to view their own information
-		return this.firstName;
+		return firstName;
 	}
-	
-	public String getFirstName(int targetUserID) {
+
+	public void setFirstName(String firstName) {
 		try {
-			if(this.roleID == 1 || this.roleID == 2) {
-				return users.get(targetUserID).firstName;
-			}
-			else {
-				throw new SecurityCheck("You do not have permission to view this information.");
-			}
-		}
-		catch(SecurityCheck e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	
-	
-	public void setLastName(String newLastName) {
-		//All users must be able to update their last name!
-		try {
-			boolean isValid = true;
-			for(char letter : newLastName.toCharArray()) {
-				if(!AllowedCharacters.allowedCharactersLast.contains(letter) || newLastName == null) {
-					isValid = false;
-					throw new UserMisinput("Please enter a valid name");
+			for(char c : firstName.toCharArray())
+			{
+				if (!AllowedCharacters.allowedCharactersFirst.contains(c)) {
+					throw new UserMisinput("Invalid character: '" + c + "' Please try again~!");
 				}
 			}
-			if(isValid) {
-				this.lastName = newLastName;
-			}
+			this.firstName = firstName;
 		}catch(UserMisinput e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+
 	public String getLastName() {
-		//All users should be able to view their own information
-		return this.lastName;
+		return lastName;
 	}
-	
-	public String getLastName(int targetUserID) {
+
+	public void setLastName(String lastName) {
 		try {
-			if(this.roleID == 1 || this.roleID == 2) {
-				return users.get(targetUserID).lastName;
-			}
-			else {
-				throw new SecurityCheck("You do not have permission to view this information.");
-			}
-		}
-		catch(SecurityCheck e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	
-	
-	public void setEmail(String newEmail) {
-		//All users must be able to update their email!
-		try {
-			boolean isValid = true;
-			for(char letter : newEmail.toCharArray()) {
-				if(!AllowedCharacters.allowedCharactersEmail.contains(letter) || newEmail == null) {
-					isValid = false;
-					throw new UserMisinput("Please enter a valid email");
+			for(char c : lastName.toCharArray())
+			{
+				if (!AllowedCharacters.allowedCharactersLast.contains(c)) {
+					throw new UserMisinput("Invalid character: '" + c + "' Please try again~!");
 				}
 			}
-			if(isValid) {
-				this.email = newEmail;
-			}
+			this.lastName = lastName;
 		}catch(UserMisinput e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getEmail() {
-		//All users should be able to view their own information
-		return this.email;
+		return email;
 	}
-	
-	public String getEmail(int targetUserID) {
+
+	public void setEmail(String email) {
 		try {
-			if(this.roleID == 1 || this.roleID == 2) {
-				return users.get(targetUserID).email;
+			for(char c : email.toCharArray())
+			{
+				if (!AllowedCharacters.allowedCharactersEmail.contains(c)) {
+					throw new UserMisinput("Invalid character: '" + c + "' Please try again~!");
+				}
 			}
-			else {
-				throw new SecurityCheck("You do not have permission to view this information.");
-			}
-		}
-		catch(SecurityCheck e) {
+			this.email = email;
+		}catch(UserMisinput e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
-	
-	
-	
-	public String getAllInformation(int targetUserID) {
-		String targetUsername = getUsername(targetUserID);
-		String targetPassword = getPassword(targetUserID);
-		String targetFirstName = getFirstName(targetUserID);
-		String targetLastName = getLastName(targetUserID);
-		String targetEmail = getEmail(targetUserID);
-		return "User #" + targetUserID + "\n" + "Username: " + targetUsername + "\n" + "Password: " + targetPassword + "\n" + "Name: " + targetFirstName + " " + targetLastName + "\n" + "Email: " + targetEmail;
+
+	public String getRole() {
+		return role;
 	}
-	
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [username=" + username + ", password=" + password + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", email=" + email + ", role=" + role + "]";
+	}
+
 }

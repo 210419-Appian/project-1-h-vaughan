@@ -1,53 +1,124 @@
 package com.revature.models;
 
-import java.util.HashMap;
+public class Account {
 
-import com.revature.throwables.BalanceBelowZero;
-
-public abstract class Account {
-
-	public int accountID; // primary key
-	public double balance; // not null
+	public int accountID; 
+	public double balance; 
 	public String status;
 	public String accountType;
-	public static HashMap<Integer, Account> accounts = new HashMap<Integer, Account>();
+	public User owner;
 	
-	Account() {
+	public Account() {
 		super();
 	}
 	
-	Account(double balance, String status) {
-		super();
-		
-		int IDcount = 1; //In theory, this should make no Account have the same ID
-		while (accounts.containsKey(IDcount) == true) {
-			IDcount++;
-		}
-		this.accountID = IDcount;
-		
+	public Account(double balance, String status, String accountType, User owner) {
+		super();		
 		this.balance = balance;
 		this.status = status;
-		accounts.put(accountID, this);
+		this.accountType = accountType;
+		this.owner = owner;
 	}
 	
-	public abstract String withdraw(int accountID, double amount); 
-	
-	public abstract String deposit(int accountID, double amount);
-	
-	public String transfer(int sourceAccountID, int targetAccountID, double amount) {
-		try {
-			if (amount > this.balance) {
-				throw new BalanceBelowZero("You do not have enough funds in " + accounts.get(sourceAccountID).accountType + " Account #" + accountID + " to transfer. Please try again.");
-			}
-			else {
-				this.balance = this.balance - amount;
-				accounts.get(targetAccountID).balance = accounts.get(targetAccountID).balance + amount;
-				
-				return "$" + amount + " has been transferred from " + accounts.get(sourceAccountID).accountType + " Account #" + sourceAccountID + " to " + accounts.get(targetAccountID).accountType + " Account #" + targetAccountID;
-			}
-		} catch (BalanceBelowZero e) {
-			e.printStackTrace();
-		}
-		return "An error has ocurred. Please try again.";
+	public Account(int accountID, double balance, String status, String accountType, User owner) {
+		super();
+		this.accountID = accountID;
+		this.balance = balance;
+		this.status = status;
+		this.accountType = accountType;
+		this.owner = owner;
 	}
+
+	public int getAccountID() {
+		return accountID;
+	}
+
+	public void setAccountID(int accountID) {
+		this.accountID = accountID;
+	}
+
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + accountID;
+		result = prime * result + ((accountType == null) ? 0 : accountType.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(balance);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Account other = (Account) obj;
+		if (accountID != other.accountID)
+			return false;
+		if (accountType == null) {
+			if (other.accountType != null)
+				return false;
+		} else if (!accountType.equals(other.accountType))
+			return false;
+		if (Double.doubleToLongBits(balance) != Double.doubleToLongBits(other.balance))
+			return false;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Account [accountID=" + accountID + ", balance=" + balance + ", status=" + status + ", accountType="
+				+ accountType + ", owner=" + owner + "]";
+	}
+	
+
 }
