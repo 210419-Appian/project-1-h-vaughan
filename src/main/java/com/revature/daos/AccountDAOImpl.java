@@ -105,7 +105,34 @@ public class AccountDAOImpl implements AccountDAO{
 
 	@Override
 	public List<Account> findByUser(User u) {
-		// TODO Auto-generated method stub
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "SELECT * FROM accounts WHERE account_owner = ?;";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setString(1, u.getUsername());
+			
+			ResultSet result = statement.executeQuery();
+			
+			List<Account> list = new ArrayList<>();
+			
+			while(result.next()) {
+				Account account = new Account();
+				
+				account.setAccountID(result.getInt("account_id"));
+				account.setBalance(result.getFloat("balance"));
+				account.setStatus(result.getString("account_status"));
+				account.setAccountType(result.getString("account_type"));
+				account.setOwner(uDao.findByUsername(result.getString("account_owner")));
+				
+				list.add(account);
+			}			
+			return list;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

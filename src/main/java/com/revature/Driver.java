@@ -86,8 +86,11 @@ public class Driver {
 		
 		aDao.addAccount(newAccount);
 		
+		List<Account> list3 = aDao.findByUser(uDao.findByUsername("standardUsername"));
 		
-		
+		for(Account a : list3) {
+			System.out.println(a);
+		}
 		
 	}
 
