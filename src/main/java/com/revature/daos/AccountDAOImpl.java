@@ -136,4 +136,86 @@ public class AccountDAOImpl implements AccountDAO{
 		return null;
 	}
 
+	@Override
+	public boolean withdraw(Account a, double amount) {
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			int accountID = a.getAccountID();
+			double newBalance = a.getBalance() - amount;
+			
+			String sql = "UPDATE accounts SET balance = ? WHERE account_id = ?;";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setDouble(1, newBalance);
+			statement.setInt(2, accountID);
+			
+			statement.execute();
+
+			return true;
+
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deposit(Account a, double amount) {
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			int accountID = a.getAccountID();
+			double newBalance = a.getBalance() + amount;
+			
+			String sql = "UPDATE accounts SET balance = ? WHERE account_id = ?;";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setDouble(1, newBalance);
+			statement.setInt(2, accountID);
+			
+			statement.execute();
+
+			return true;
+
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean transfer(Account sourceAccount, Account targetAccount, double amount) {
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			int sourceAccountID = sourceAccount.getAccountID();
+			double sourceNewBalance = sourceAccount.getBalance() - amount;
+			int targetAccountID = targetAccount.getAccountID();
+			double targetNewBalance = targetAccount.getBalance() + amount;
+			
+			String sql = "BEGIN;"
+					+ "UPDATE accounts SET balance = ? WHERE account_id = ?;"
+					+ "UPDATE accounts SET balance = ? WHERE account_id = ?;"
+					+ "COMMIT;";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setDouble(1, sourceNewBalance);
+			statement.setInt(2, sourceAccountID);
+			statement.setDouble(3, targetNewBalance);
+			statement.setInt(4, targetAccountID);
+			
+			statement.execute();
+
+			return true;
+
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

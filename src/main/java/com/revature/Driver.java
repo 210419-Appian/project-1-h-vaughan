@@ -28,28 +28,26 @@ public class Driver {
 		myUser.setPassword("NOT (@ FNVIALID EUSNFEMA0921-4398");
 		System.out.println(myUser.getPassword());
 		
-		System.out.println("================================AccountServices================================");
+
 		
-		AccountServices aServices = new AccountServices();
-		
-		Account myAccount = new Account();
-		
-		System.out.println(myAccount.getBalance());
-		myAccount.setBalance(20.34);
-		System.out.println(myAccount.getBalance());
-		aServices.withdraw(myAccount, 8.23);
-		System.out.println(myAccount.getBalance());
-		aServices.withdraw(myAccount, 12.12);
-		System.out.println(myAccount.getBalance());
-		
-		Account myAccount2 = new Account();
-		
-		myAccount2.setBalance(10.00);
-		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
-		aServices.transfer(myAccount, myAccount2, 9.54);
-		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
-		aServices.transfer(myAccount, myAccount2, 9.54);
-		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
+//		Account myAccount = new Account();
+//		
+//		System.out.println(myAccount.getBalance());
+//		myAccount.setBalance(20.34);
+//		System.out.println(myAccount.getBalance());
+//		aServices.withdraw(myAccount, 8.23);
+//		System.out.println(myAccount.getBalance());
+//		aServices.withdraw(myAccount, 12.12);
+//		System.out.println(myAccount.getBalance());
+//		
+//		Account myAccount2 = new Account();
+//		
+//		myAccount2.setBalance(10.00);
+//		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
+//		aServices.transfer(myAccount, myAccount2, 9.54);
+//		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
+//		aServices.transfer(myAccount, myAccount2, 9.54);
+//		System.out.println("Acc 1: " + myAccount.getBalance() + "! Acc 2: " + myAccount2.getBalance() + "!");
 		
 		System.out.println("================================DatabaseConnectivity================================");
 		
@@ -91,6 +89,18 @@ public class Driver {
 		for(Account a : list3) {
 			System.out.println(a);
 		}
+		
+		System.out.println("================================AccountServices================================");
+		
+		AccountServices aServices = new AccountServices();
+				
+		System.out.println(aServices.withdraw(aDao.findByID(6), 9000));	//should be true	
+		System.out.println(aServices.withdraw(aDao.findByID(3), 25000)); //should be false
+		
+		System.out.println(aServices.deposit(aDao.findByID(4), 8909.21)); //should be true
+		
+		System.out.println(aServices.transfer(aDao.findByID(2), aDao.findByID(5), 0.22)); //should be true
+		System.out.println(aServices.transfer(aDao.findByID(5), aDao.findByID(2), 0.23)); //should be false
 		
 	}
 

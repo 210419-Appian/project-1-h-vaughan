@@ -15,4 +15,10 @@ public interface AccountDAO {
 	
 	List<Account> findByUser(User u);
 	
+	boolean withdraw(Account a, double amount);
+	
+	boolean deposit (Account a, double amount);
+	
+	boolean transfer(Account sourceAccount, Account targetAccount, double amount);
+	
 }
