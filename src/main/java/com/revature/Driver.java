@@ -7,6 +7,7 @@ import com.revature.daos.UserDAOImpl;
 import com.revature.models.Account;
 import com.revature.models.User;
 import com.revature.services.AccountServices;
+import com.revature.services.UserServices;
 
 public class Driver {
 
@@ -101,6 +102,28 @@ public class Driver {
 		
 		System.out.println(aServices.transfer(aDao.findByID(2), aDao.findByID(5), 0.22)); //should be true
 		System.out.println(aServices.transfer(aDao.findByID(5), aDao.findByID(2), 0.23)); //should be false
+		
+		
+		System.out.println("================================UserServices================================");
+		
+		UserServices uServices = new UserServices();
+		
+		User anotherUser = new User("AnotherUsername", "AnotherPassword", "Anna", "There", "another@account.com", "Standard");
+		
+		uDao.addUser(anotherUser);
+		
+		User fakeAdmin = new User("fakeUsername", "fakePassword", "Not", "Real", "notarealemail@adress.com", "Admin");
+		
+		uServices.registerAccount(20.00, "Checking", anotherUser);
+		
+		User loggedInUser = uServices.findByUsername("adminUsername", fakeAdmin);
+		System.out.println(loggedInUser.getRole());
+		
+		System.out.println(uServices.findAll(uServices.findByUsername("adminUsername", fakeAdmin))); //should return the list
+		System.out.println(uServices.findAll(uServices.findByUsername("AnotherUsername", fakeAdmin))); //should throw a SecurityCheck exception
+		
+		System.out.println(aServices.findAll(fakeAdmin));
+		System.out.println(aServices.findByID(2, fakeAdmin));
 		
 	}
 

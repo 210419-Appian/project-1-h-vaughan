@@ -10,8 +10,9 @@ public interface UserDAO {
 	List<User> findAll();
 	
 	User findByUsername(String username);
-
 	
 	boolean addUser(User u);
+	
+	boolean registerAccount(double balance, String accountType, User user);
 	
 }

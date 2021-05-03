@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.revature.models.Account;
 import com.revature.models.User;
 import com.revature.util.ConnectionUtil;
 
@@ -92,6 +93,33 @@ public class UserDAOImpl implements UserDAO{
 			statement.setString(++index, u.getLastName());
 			statement.setString(++index, u.getEmail());
 			statement.setString(++index, u.getRole());
+			
+			statement.execute();
+			
+			return true;
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean registerAccount(double balance, String accountType, User user) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			
+			Account newAccount = new Account(balance, "Pending", accountType, user);
+			
+			String sql = "INSERT INTO accounts (balance, account_status, account_type, account_owner)" 
+					+ "VALUES(?,?,?,?);";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int index = 0;
+			statement.setDouble(++index, newAccount.getBalance());
+			statement.setString(++index, newAccount.getStatus());
+			statement.setString(++index, newAccount.getAccountType());
+			statement.setString(++index, newAccount.getOwner().getUsername());
 			
 			statement.execute();
 			
