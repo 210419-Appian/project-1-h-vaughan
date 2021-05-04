@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.daos.AccountDAOImpl;
@@ -22,8 +23,8 @@ public class AccountServices {
 		}catch(SecurityCheck e) {
 			e.printStackTrace();
 		}
-		
-		return null;
+		List<Account> empty = new ArrayList<Account>();
+		return empty;
 	}
 	
 	public Account findByID(int id, User u) {
@@ -40,8 +41,10 @@ public class AccountServices {
 		return null;
 	}
 	
-	public boolean addAccount(Account a) {
+	public boolean addAccount(Account a, User owner) {
 		//TODO: Make sure a is valid
+		a.setStatus("Pending");
+		a.setOwner(owner);
 		return aDao.addAccount(a);
 	}
 	

@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.daos.UserDAOImpl;
@@ -19,8 +20,8 @@ public class UserServices {
 		}catch(SecurityCheck e) {
 			e.printStackTrace();
 		}
-		
-		return null;
+		List<User> empty = new ArrayList<User>();
+		return empty;
 	}
 	
 	public User findByUsername(String username, User u) {

@@ -2,11 +2,11 @@ package com.revature.models;
 
 public class Account {
 
-	public int accountID; 
-	public double balance; 
-	public String status;
-	public String accountType;
-	public User owner;
+	private int accountID; 
+	private double balance; 
+	private String status;
+	private String accountType;
+	private User owner;
 	
 	public Account() {
 		super();
