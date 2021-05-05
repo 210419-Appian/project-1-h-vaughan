@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.User;
@@ -19,28 +20,37 @@ public class UserServlet extends HttpServlet {
 	private UserServices uService = new UserServices();
 	private ObjectMapper om = new ObjectMapper();
 	private User fakeAdmin = new User("fakeUsername", "fakePassword", "Not", "Real", "notarealemail@adress.com", "Admin");
-	private User fakeStandard = new User("fakeUsername", "fakePassword", "Not", "Real", "notarealemail@adress.com", "Standard");
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//Gets all users from the database via UserServices
+		//TODO: RETURN SOMETHING IF NOT PERMISSION
 		
-		//List<User> list = uService.findAll(fakeStandard);
-		List<User> list = uService.findAll(fakeAdmin); //TODO: LOGIN !!!!
+		HttpSession ses = req.getSession(false);
+		if(ses != null) {
+			String username = (String) ses.getAttribute("username");
+			User loggedIn = uService.findByUsername(username, fakeAdmin);
+			
+			List<User> list = uService.findAll(loggedIn); 
 		
-		//Convert Java Object list into a JSON string
-		String json = om.writeValueAsString(list);
+			//Convert Java Object list into a JSON string
+			String json = om.writeValueAsString(list);
 		
-		PrintWriter pw = resp.getWriter();
+			PrintWriter pw = resp.getWriter();
 
-		if(list.isEmpty()) {
-			pw.print("You do not have permission to view this information!");
-			resp.setStatus(401);
+			if(list.isEmpty()) {
+				pw.print("You do not have permission to view this information!");
+				resp.setStatus(401);
+			}else {
+				pw.print(json);
+				resp.setStatus(200); //Success!
+			}
+			resp.setContentType("application/json");
 		}else {
-			pw.print(json);
-			resp.setStatus(200); //Success!
+			PrintWriter pw = resp.getWriter();
+			resp.setStatus(401);
+			pw.print("Please log in first!");
 		}
-		resp.setContentType("application/json");
 	}
 	
 	@Override
