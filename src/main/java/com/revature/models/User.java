@@ -5,6 +5,7 @@ import com.revature.util.AllowedCharacters;
 
 public class User {
 
+	private int userID;
 	private String username; // not null, unique
 	private String password; // not null
 	private String firstName; // not null
@@ -134,6 +135,14 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+	
+	public int getUserID() {
+		return userID;
+	}
+
+	public void setUserID(int userID) {
+		this.userID = userID;
+	}
 
 	@Override
 	public int hashCode() {
@@ -144,6 +153,7 @@ public class User {
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + userID;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -182,6 +192,8 @@ public class User {
 				return false;
 		} else if (!role.equals(other.role))
 			return false;
+		if (userID != other.userID)
+			return false;
 		if (username == null) {
 			if (other.username != null)
 				return false;
@@ -192,8 +204,11 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", firstName="
+		return "User [userID=" + userID + ", username=" + username + ", password=" + password + ", firstName="
 				+ firstName + ", lastName=" + lastName + ", email=" + email + ", role=" + role + "]";
 	}
+
+
+
 
 }

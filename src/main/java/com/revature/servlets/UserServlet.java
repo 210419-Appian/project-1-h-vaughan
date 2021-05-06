@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.models.Account;
 import com.revature.models.User;
 import com.revature.services.UserServices;
 
@@ -19,61 +20,80 @@ public class UserServlet extends HttpServlet {
 
 	private UserServices uService = new UserServices();
 	private ObjectMapper om = new ObjectMapper();
-	private User fakeAdmin = new User("fakeUsername", "fakePassword", "Not", "Real", "notarealemail@adress.com", "Admin");
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//Gets all users from the database via UserServices
-		//TODO: RETURN SOMETHING IF NOT PERMISSION
+		PrintWriter out = resp.getWriter();
 		
 		HttpSession ses = req.getSession(false);
 		if(ses != null) {
 			String username = (String) ses.getAttribute("username");
-			User loggedIn = uService.findByUsername(username, fakeAdmin);
+			User loggedIn = uService.findByUsername(username);
 			
-			List<User> list = uService.findAll(loggedIn); 
-		
-			//Convert Java Object list into a JSON string
-			String json = om.writeValueAsString(list);
-		
-			PrintWriter pw = resp.getWriter();
-
-			if(list.isEmpty()) {
-				pw.print("You do not have permission to view this information!");
-				resp.setStatus(401);
+			if(loggedIn.getRole().equals("Admin") || loggedIn.getRole().equals("Employee")) {
+				//TODO: Find Users by ID if statement, split url etc
+				List<User> list = uService.findAll(); 
+				
+				//Convert Java Object list into a JSON string
+				String json = om.writeValueAsString(list);
+			
+				out.print(json);
+				resp.setStatus(200); //Success!				
+				resp.setContentType("application/json");
 			}else {
-				pw.print(json);
-				resp.setStatus(200); //Success!
-			}
-			resp.setContentType("application/json");
+				out.print("You do not have permission to view this information! >:(");
+				resp.setStatus(401);
+			}			
 		}else {
-			PrintWriter pw = resp.getWriter();
 			resp.setStatus(401);
-			pw.print("Please log in first!");
+			out.print("Please log in first!");
 		}
 	}
 	
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		StringBuilder sb = new StringBuilder();
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		PrintWriter out = resp.getWriter();
 		
-		BufferedReader reader = req.getReader();
-		
-		String line = reader.readLine();
-		
-		while(line != null) {
-			sb.append(line);
-			line = reader.readLine();
-		}
+		HttpSession ses = req.getSession(false);
+		if(ses != null) {
+			String username = (String) ses.getAttribute("username");
+			User loggedIn = uService.findByUsername(username);
+			
+			StringBuilder sb = new StringBuilder();
+			
+			BufferedReader reader = req.getReader();
+			
+			String line = reader.readLine();
+			
+			while(line != null) {
+				sb.append(line);
+				line = reader.readLine();
+			}
 
-		String body = new String(sb); 
-		//Takes in the user inputed Post request and turns it into something readable for the ObjectMapper
-		
-		User u = om.readValue(body, User.class);
-		if(uService.addUser(u)) {
-			resp.setStatus(201); //Created!
+			String body = new String(sb); 
+			
+			User u = om.readValue(body, User.class);
+			
+			if(loggedIn.getRole().equals("Admin") || u.getUserID() == loggedIn.getUserID()) {	
+				if(uService.findById(u.getUserID()) != null) {
+					//User exists in the database
+					uService.updateUser(u, u.getUserID());
+					out.print(u.getUsername() + " has successfully been updated!");
+					resp.setStatus(200);	
+				}else {
+					//User does not exist in the database
+					out.print("User #" + u.getUserID() + " does not exist in the database.");
+					resp.setStatus(404);
+				}
+				
+			}else {
+				out.print("You may only update your own user account (unless you are an admin, which you are not)");
+				resp.setStatus(401);
+			}
 		}else {
-			resp.setStatus(400); //Generic bad request
-		}		
-	}	
+			out.print("Please log in first!");
+			resp.setStatus(401);
+		}
+	}
 }

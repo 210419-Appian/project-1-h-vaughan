@@ -10,32 +10,16 @@ import com.revature.throwables.SecurityCheck;
 public class UserServices {
 	private static UserDAOImpl uDao = new UserDAOImpl();
 		
-	public List<User> findAll(User u) {
-		try {
-			if (u.getRole().equals("Admin") || u.getRole().equals("Employee")) {
-				return uDao.findAll();
-			} else {
-				throw new SecurityCheck("You do not have permssion to view this information!"); 
-			}
-		}catch(SecurityCheck e) {
-			e.printStackTrace();
-		}
-		List<User> empty = new ArrayList<User>();
-		return empty;
+	public List<User> findAll() {
+		return uDao.findAll();
 	}
 	
-	public User findByUsername(String username, User u) {
-		try {
-			if (u.getRole().equals("Admin") || u.getRole().equals("Employee")) {
-				return uDao.findByUsername(username);
-			} else {
-				throw new SecurityCheck("You do not have permssion to view this information!"); 
-			}
-		}catch(SecurityCheck e) {
-			e.printStackTrace();
-		}
-		
-		return null;
+	public User findByUsername(String username) {
+		return uDao.findByUsername(username);
+	}
+	
+	public User findById(int id) {
+		return uDao.findByID(id);
 	}
 	
 	public boolean addUser(User u) {
@@ -48,6 +32,10 @@ public class UserServices {
 			return uDao.registerAccount(balance, accountType, user);
 		}
 		return false;
+	}
+	
+	public boolean updateUser(User u, int id) {
+		return uDao.updateUser(u, id);
 	}
 	
 }

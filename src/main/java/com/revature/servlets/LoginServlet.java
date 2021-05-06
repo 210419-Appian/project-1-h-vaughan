@@ -20,7 +20,6 @@ public class LoginServlet extends HttpServlet{
 	
 	LoginServices lService = new LoginServices();
 	UserServices uService = new UserServices();
-	private User fakeAdmin = new User("fakeUsername", "fakePassword", "Not", "Real", "notarealemail@adress.com", "Admin");
 	private ObjectMapper om = new ObjectMapper();
 	
 	@Override
@@ -32,25 +31,34 @@ public class LoginServlet extends HttpServlet{
 		
 		//The userDTO should then be passed to the Service layer to check if credentials are accurate.
 		
-		RequestDispatcher rd = null;
+
 		PrintWriter out = resp.getWriter();
 		
 		if(lService.login(u.username, u.password)) {
 			//First thing: Create a session so we remember our user/client in the future
 			HttpSession ses = req.getSession(); //cookie created and put in the response
 			ses.setAttribute("username", u.username); //save username in session for use later
+
+			User myUser = uService.findByUsername(u.username);
+			ses.setAttribute("userID", myUser.getRole());
 			
-			rd = req.getRequestDispatcher("success");
-			rd.forward(req, resp);
+			out.print("Welcome, " + myUser.getFirstName() + " " + myUser.getLastName() +"! You have successfully logged in.");
+			resp.setStatus(200);
 		}else {
-			rd = req.getRequestDispatcher("index.html");
-			rd.include(req, resp);
-			out.print("<span style='color:red; text-align:center'>Invalid Username/Password</span>");
+			out.print("Login failed. Please try again!");
+			resp.setStatus(400);
 		}
 		
 		//resp.setStatus(200); //Tomcat will default to Status Code 200 if it find a servlet method to handle the request
 		
 		
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession ses = req.getSession(false);
+		PrintWriter out = resp.getWriter();
+		out.print(ses.getAttribute("username").toString() + " is currently logged in!");
 	}
 	
 }

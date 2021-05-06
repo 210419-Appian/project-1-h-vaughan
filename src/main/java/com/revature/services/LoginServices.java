@@ -8,7 +8,7 @@ public class LoginServices {
 	private User fakeAdmin = new User("fakeUsername", "fakePassword", "Not", "Real", "notarealemail@adress.com", "Admin");
 	
 	public boolean login(String username, String password) {
-		User myUser = uService.findByUsername(username, fakeAdmin);
+		User myUser = uService.findByUsername(username);
 		
 		if (myUser != null) {
 			return true;

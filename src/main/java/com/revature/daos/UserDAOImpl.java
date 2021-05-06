@@ -29,6 +29,7 @@ public class UserDAOImpl implements UserDAO{
 			while(result.next()) {
 				User user = new User();
 				
+				user.setUserID(result.getInt("user_id"));
 				user.setUsername(result.getString("username"));
 				user.setPassword(result.getString("pword"));
 				user.setFirstName(result.getString("first_name"));
@@ -61,6 +62,7 @@ public class UserDAOImpl implements UserDAO{
 			while(result.next()) {
 				User user = new User();
 				
+				user.setUserID(result.getInt("user_id"));
 				user.setUsername(result.getString("username"));
 				user.setPassword(result.getString("pword"));
 				user.setFirstName(result.getString("first_name"));
@@ -129,6 +131,71 @@ public class UserDAOImpl implements UserDAO{
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public boolean updateUser(User u, int id) {
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "UPDATE users SET "
+					+ "username = ?, "
+					+ "pword = ?, "
+					+ "first_name = ?, "
+					+ "last_name = ?, "
+					+ "email = ?, "
+					+ "user_role = ? "
+					+ "WHERE user_id = " + id + ";";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int index = 0;
+			statement.setString(++index, u.getUsername());
+			statement.setString(++index, u.getPassword());
+			statement.setString(++index, u.getFirstName());
+			statement.setString(++index, u.getLastName());
+			statement.setString(++index, u.getEmail());
+			statement.setString(++index, u.getRole());
+			
+			statement.execute();
+			
+			return true;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public User findByID(int id) {
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "SELECT * FROM users WHERE user_id = ?;";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setInt(1, id); 
+			
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				User user = new User();
+				
+				user.setUserID(result.getInt("user_id"));
+				user.setUsername(result.getString("username"));
+				user.setPassword(result.getString("pword"));
+				user.setFirstName(result.getString("first_name"));
+				user.setLastName(result.getString("last_name"));				
+				user.setEmail(result.getString("email"));
+				user.setRole(result.getString("user_role"));
+				
+				return user;
+			}			
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.revature.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,10 +14,16 @@ public class LogoutServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession ses = req.getSession(false);
 		
+		PrintWriter out = resp.getWriter();
+		
 		if(ses != null) {
+			out.print("You have successfully logged out, " + ses.getAttribute("username"));
+			resp.setStatus(200);
 			ses.invalidate();
+		}else {
+			out.print("There was no user logged into the session.");
+			resp.setStatus(400);
 		}
-		resp.sendRedirect("");  //sends back to the base url of the application
 	}
 	
 	@Override
