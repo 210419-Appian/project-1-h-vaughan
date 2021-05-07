@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,12 @@ public class UserServlet extends HttpServlet {
 
 	private UserServices uService = new UserServices();
 	private ObjectMapper om = new ObjectMapper();
+	private String BaseURL;
+	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		BaseURL = config.getInitParameter("BaseURL");
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,20 +38,43 @@ public class UserServlet extends HttpServlet {
 			String username = (String) ses.getAttribute("username");
 			User loggedIn = uService.findByUsername(username);
 			
-			if(loggedIn.getRole().equals("Admin") || loggedIn.getRole().equals("Employee")) {
-				//TODO: Find Users by ID if statement, split url etc
-				List<User> list = uService.findAll(); 
-				
-				//Convert Java Object list into a JSON string
-				String json = om.writeValueAsString(list);
+			System.out.println(req.getParameter("id"));
 			
-				out.print(json);
-				resp.setStatus(200); //Success!				
-				resp.setContentType("application/json");
+			if (req.getParameter("id") == null) {
+				if(loggedIn.getRole().equals("Admin") || loggedIn.getRole().equals("Employee")) {
+					List<User> list = uService.findAll(); 
+					
+					//Convert Java Object list into a JSON string
+					String json = om.writeValueAsString(list);
+				
+					out.print(json);
+					resp.setStatus(200); //Success!				
+					resp.setContentType("application/json");
+				}else {
+					out.print("You do not have permission to view this information! >:(");
+					resp.setStatus(401);
+				}	
 			}else {
-				out.print("You do not have permission to view this information! >:(");
-				resp.setStatus(401);
-			}			
+				int targetID = Integer.parseInt(req.getParameter("id"));
+				
+				if(loggedIn.getRole().equals("Admin") || loggedIn.getRole().equals("Employee") || loggedIn.getUserID() == targetID) {
+					User targetUser = uService.findById(targetID);
+					if (targetUser == null) {
+						out.print("User #" + targetID + " does not exist. Please try again!");
+						resp.setStatus(404);
+					}else {
+						String json = om.writeValueAsString(targetUser);
+						
+						out.print(json);
+						resp.setStatus(200);
+						resp.setContentType("application/json");
+					}
+
+				}else {
+					out.print("You do not have permission to view this information! >:(");
+					resp.setStatus(401);
+				}
+			}					
 		}else {
 			resp.setStatus(401);
 			out.print("Please log in first!");
