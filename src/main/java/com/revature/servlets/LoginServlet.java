@@ -40,7 +40,7 @@ public class LoginServlet extends HttpServlet{
 			ses.setAttribute("username", u.username); //save username in session for use later
 
 			User myUser = uService.findByUsername(u.username);
-			ses.setAttribute("userID", myUser.getRole());
+			ses.setAttribute("userRole", myUser.getRole());
 			
 			out.print("Welcome, " + myUser.getFirstName() + " " + myUser.getLastName() +"! You have successfully logged in.");
 			resp.setStatus(200);

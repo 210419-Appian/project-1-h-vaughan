@@ -78,9 +78,14 @@ public class UserServlet extends HttpServlet {
 			if(loggedIn.getRole().equals("Admin") || u.getUserID() == loggedIn.getUserID()) {	
 				if(uService.findById(u.getUserID()) != null) {
 					//User exists in the database
-					uService.updateUser(u, u.getUserID());
-					out.print(u.getUsername() + " has successfully been updated!");
-					resp.setStatus(200);	
+					if (uService.updateUser(u, u.getUserID())) {
+						out.print(u.getUsername() + " has successfully been updated!");
+						resp.setStatus(200);	
+					} else {
+						out.print("That username is taken. Please try again!");
+						resp.setStatus(400);
+					}
+
 				}else {
 					//User does not exist in the database
 					out.print("User #" + u.getUserID() + " does not exist in the database.");

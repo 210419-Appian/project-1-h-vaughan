@@ -35,7 +35,7 @@ public class AccountDAOImpl implements AccountDAO{
 				account.setBalance(result.getFloat("balance"));
 				account.setStatus(result.getString("account_status"));
 				account.setAccountType(result.getString("account_type"));
-				account.setOwner(uDao.findByUsername(result.getString("account_owner")));
+				account.setOwner(uDao.findByID(result.getInt("account_owner")));
 				
 				list.add(account);
 			}			

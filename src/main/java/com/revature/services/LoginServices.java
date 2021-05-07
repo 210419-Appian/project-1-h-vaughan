@@ -5,13 +5,15 @@ import com.revature.models.User;
 public class LoginServices {
 	
 	private UserServices uService = new UserServices();
-	private User fakeAdmin = new User("fakeUsername", "fakePassword", "Not", "Real", "notarealemail@adress.com", "Admin");
 	
 	public boolean login(String username, String password) {
 		User myUser = uService.findByUsername(username);
 		
 		if (myUser != null) {
-			return true;
+			if (myUser.getPassword().equals(password)) {
+				return true;
+			}
+			return false;
 		}else {
 			return false;
 		}

@@ -35,7 +35,18 @@ public class UserServices {
 	}
 	
 	public boolean updateUser(User u, int id) {
-		return uDao.updateUser(u, id);
+		//return false if u.getUsername() is not null in the database, check id and u2.getUserID. If they are the same, is true, if different return false
+		User u2 = findByUsername(u.getUsername());
+		if(u2 != null) {
+			if(u2.getUserID() == id) {
+				return uDao.updateUser(u, id);				
+			}else {
+				return false;
+			}
+		}else {
+			return uDao.updateUser(u, id);
+		}
+
 	}
 	
 }
