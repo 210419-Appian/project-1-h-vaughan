@@ -6,13 +6,13 @@ public class Account {
 	private double balance; 
 	private String status;
 	private String accountType;
-	private User owner;
+	private int owner;
 	
 	public Account() {
 		super();
 	}
 	
-	public Account(double balance, String status, String accountType, User owner) {
+	public Account(double balance, String status, String accountType, int owner) {
 		super();		
 		this.balance = balance;
 		this.status = status;
@@ -20,7 +20,7 @@ public class Account {
 		this.owner = owner;
 	}
 	
-	public Account(int accountID, double balance, String status, String accountType, User owner) {
+	public Account(int accountID, double balance, String status, String accountType, int owner) {
 		super();
 		this.accountID = accountID;
 		this.balance = balance;
@@ -61,11 +61,11 @@ public class Account {
 		this.accountType = accountType;
 	}
 
-	public User getOwner() {
+	public int getOwner() {
 		return owner;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(int owner) {
 		this.owner = owner;
 	}
 
@@ -78,7 +78,7 @@ public class Account {
 		long temp;
 		temp = Double.doubleToLongBits(balance);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
+		result = prime * result + owner;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
@@ -101,10 +101,7 @@ public class Account {
 			return false;
 		if (Double.doubleToLongBits(balance) != Double.doubleToLongBits(other.balance))
 			return false;
-		if (owner == null) {
-			if (other.owner != null)
-				return false;
-		} else if (!owner.equals(other.owner))
+		if (owner != other.owner)
 			return false;
 		if (status == null) {
 			if (other.status != null)

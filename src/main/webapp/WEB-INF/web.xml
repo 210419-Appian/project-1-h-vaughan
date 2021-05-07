@@ -12,10 +12,6 @@
 		<display-name>UserServlet</display-name>
 		<servlet-name>UserServlet</servlet-name>
 		<servlet-class>com.revature.servlets.UserServlet</servlet-class>
-		<init-param>
-			<param-name>BaseURL</param-name>
-			<param-value>/rocp-project/</param-value>
-		</init-param>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>UserServlet</servlet-name>
@@ -60,5 +56,31 @@
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>WithdrawServlet</servlet-name>
+		<servlet-class>com.revature.servlets.WithdrawServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WithdrawServlet</servlet-name>
+		<url-pattern>/accounts/withdraw</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DepositServlet</servlet-name>
+		<servlet-class>com.revature.servlets.DepositServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DepositServlet</servlet-name>
+		<url-pattern>/accounts/deposit</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>TransferServlet</servlet-name>
+		<servlet-class>com.revature.servlets.TransferServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TransferServlet</servlet-name>
+		<url-pattern>/accounts/transfer</url-pattern>
+	</servlet-mapping>
 
 </web-app>

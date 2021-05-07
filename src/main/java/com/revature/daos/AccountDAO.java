@@ -15,6 +15,10 @@ public interface AccountDAO {
 	
 	List<Account> findByUser(User u);
 	
+	List<Account> findByStatus(String status);
+	
+	boolean updateAccount(Account a, int id);
+	
 	boolean withdraw(Account a, double amount);
 	
 	boolean deposit (Account a, double amount);

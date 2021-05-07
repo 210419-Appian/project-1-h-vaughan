@@ -21,12 +21,6 @@ public class UserServlet extends HttpServlet {
 
 	private UserServices uService = new UserServices();
 	private ObjectMapper om = new ObjectMapper();
-	private String BaseURL;
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		BaseURL = config.getInitParameter("BaseURL");
-	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

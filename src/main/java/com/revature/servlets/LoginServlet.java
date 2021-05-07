@@ -58,7 +58,13 @@ public class LoginServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession ses = req.getSession(false);
 		PrintWriter out = resp.getWriter();
-		out.print(ses.getAttribute("username").toString() + " is currently logged in!");
+		
+		if (ses != null) {
+			out.print(ses.getAttribute("username").toString() + " is currently logged in!");
+		}else {
+			out.print("No one is logged in!");
+		}
+
 	}
 	
 }

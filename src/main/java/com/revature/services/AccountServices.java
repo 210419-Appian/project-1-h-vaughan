@@ -13,36 +13,15 @@ public class AccountServices {
 	
 	private static AccountDAOImpl aDao = new AccountDAOImpl();
 	
-	public List<Account> findAll(User u) {
-		try {
-			if (u.getRole().equals("Admin") || u.getRole().equals("Employee")) {
-				return aDao.findAll();
-			} else {
-				throw new SecurityCheck("You do not have permssion to view this information!"); 
-			}
-		}catch(SecurityCheck e) {
-			e.printStackTrace();
-		}
-		List<Account> empty = new ArrayList<Account>();
-		return empty;
+	public List<Account> findAll() {
+		return aDao.findAll();
 	}
 	
-	public Account findByID(int id, User u) {
-		try {
-			if (u.getRole().equals("Admin") || u.getRole().equals("Employee")) {
-				return aDao.findByID(id);
-			} else {
-				throw new SecurityCheck("You do not have permssion to view this information!"); 
-			}
-		}catch(SecurityCheck e) {
-			e.printStackTrace();
-		}
-		
-		return null;
+	public Account findByID(int id) {
+		return aDao.findByID(id);
 	}
 	
-	public boolean addAccount(Account a, User owner) {
-		//TODO: Make sure a is valid
+	public boolean addAccount(Account a, int owner) {
 		a.setStatus("Pending");
 		a.setOwner(owner);
 		return aDao.addAccount(a);
@@ -53,17 +32,30 @@ public class AccountServices {
 		return aDao.findByUser(u);
 	}
 	
-	public boolean withdraw(Account account, double amount) {
-		try {
-			if(account.getBalance() < amount) {
-				throw new BalanceBelowZero("You do not have enough money in this account for this transaction! Please try again.");
+	public List<Account> findByStatus(String status) {
+		return aDao.findByStatus(status);
+	}
+	
+	public boolean updateAccount(Account a, int id) {
+		Account a2 = findByID(id);
+		if(a2 != null) {
+			if(a2.getAccountID() == id) {
+				return aDao.updateAccount(a, id);				
 			}else {
-				return aDao.withdraw(account, amount);
+				return false;
 			}
-		}catch(BalanceBelowZero e) {
-			e.printStackTrace();
+		}else {
+			return aDao.updateAccount(a, id);
 		}
-		return false;
+
+	}
+	
+	public boolean withdraw(Account account, double amount) throws BalanceBelowZero{
+		if(account.getBalance() < amount) {
+			throw new BalanceBelowZero("You do not have enough money in this account for this transaction! Please try again.");
+		}else {
+			return aDao.withdraw(account, amount);
+		}
 	}
 	
 	public boolean deposit(Account account, double amount) {
@@ -82,5 +74,7 @@ public class AccountServices {
 		}
 		return false;
 	}
+	
+	
 	
 }

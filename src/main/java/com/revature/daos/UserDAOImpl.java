@@ -110,7 +110,7 @@ public class UserDAOImpl implements UserDAO{
 	public boolean registerAccount(double balance, String accountType, User user) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 			
-			Account newAccount = new Account(balance, "Pending", accountType, user);
+			Account newAccount = new Account(balance, "Pending", accountType, user.getUserID());
 			
 			String sql = "INSERT INTO accounts (balance, account_status, account_type, account_owner)" 
 					+ "VALUES(?,?,?,?);";
@@ -121,7 +121,7 @@ public class UserDAOImpl implements UserDAO{
 			statement.setDouble(++index, newAccount.getBalance());
 			statement.setString(++index, newAccount.getStatus());
 			statement.setString(++index, newAccount.getAccountType());
-			statement.setString(++index, newAccount.getOwner().getUsername());
+			statement.setInt(++index, newAccount.getOwner());
 			
 			statement.execute();
 			
