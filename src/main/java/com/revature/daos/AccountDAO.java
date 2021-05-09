@@ -25,4 +25,6 @@ public interface AccountDAO {
 	
 	boolean transfer(Account sourceAccount, Account targetAccount, double amount);
 	
+	boolean deleteAccount(Account a);
+	
 }

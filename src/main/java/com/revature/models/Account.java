@@ -6,26 +6,37 @@ public class Account {
 	private double balance; 
 	private String status;
 	private String accountType;
+	private double interestRate;
 	private int owner;
 	
 	public Account() {
 		super();
 	}
 	
-	public Account(double balance, String status, String accountType, int owner) {
+	public Account(double balance, String status, String accountType, double interestRate, int owner) {
 		super();		
 		this.balance = balance;
 		this.status = status;
 		this.accountType = accountType;
+		if(this.accountType.equals("Checking")) {
+			this.interestRate = 0;
+		}else if(this.accountType.equals("Savings")) {
+			this.interestRate = interestRate;
+		}
 		this.owner = owner;
 	}
 	
-	public Account(int accountID, double balance, String status, String accountType, int owner) {
+	public Account(int accountID, double balance, String status, String accountType, double interestRate, int owner) {
 		super();
 		this.accountID = accountID;
 		this.balance = balance;
 		this.status = status;
-		this.accountType = accountType;
+		this.accountType = accountType;		
+		if(this.accountType.equals("Checking")) {
+			this.interestRate = 0;
+		}else if(this.accountType.equals("Savings")) {
+			this.interestRate = interestRate;
+		}
 		this.owner = owner;
 	}
 
@@ -61,6 +72,14 @@ public class Account {
 		this.accountType = accountType;
 	}
 
+	public double getInterestRate() {
+		return interestRate;
+	}
+
+	public void setInterestRate(double interestRate) {
+		this.interestRate = interestRate;
+	}
+
 	public int getOwner() {
 		return owner;
 	}
@@ -77,6 +96,8 @@ public class Account {
 		result = prime * result + ((accountType == null) ? 0 : accountType.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(balance);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(interestRate);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + owner;
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -101,6 +122,8 @@ public class Account {
 			return false;
 		if (Double.doubleToLongBits(balance) != Double.doubleToLongBits(other.balance))
 			return false;
+		if (Double.doubleToLongBits(interestRate) != Double.doubleToLongBits(other.interestRate))
+			return false;
 		if (owner != other.owner)
 			return false;
 		if (status == null) {
@@ -114,8 +137,10 @@ public class Account {
 	@Override
 	public String toString() {
 		return "Account [accountID=" + accountID + ", balance=" + balance + ", status=" + status + ", accountType="
-				+ accountType + ", owner=" + owner + "]";
+				+ accountType + ", interestRate=" + interestRate + ", owner=" + owner + "]";
 	}
+
+
 	
 
 }

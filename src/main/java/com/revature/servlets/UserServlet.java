@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.Account;
 import com.revature.models.User;
+import com.revature.models.UserDTO;
 import com.revature.services.UserServices;
 
 public class UserServlet extends HttpServlet {
@@ -118,6 +119,62 @@ public class UserServlet extends HttpServlet {
 				
 			}else {
 				out.print("You may only update your own user account (unless you are an admin, which you are not)");
+				resp.setStatus(401);
+			}
+		}else {
+			out.print("Please log in first!");
+			resp.setStatus(401);
+		}
+	}
+	
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	PrintWriter out = resp.getWriter();
+		
+		HttpSession ses = req.getSession(false);
+		if(ses != null) {
+			String username = (String) ses.getAttribute("username");
+			User loggedIn = uService.findByUsername(username);
+			
+			StringBuilder sb = new StringBuilder();
+			
+			BufferedReader reader = req.getReader();
+			
+			String line = reader.readLine();
+			
+			while(line != null) {
+				sb.append(line);
+				line = reader.readLine();
+			}
+
+			String body = new String(sb); 
+			
+			UserDTO u = om.readValue(body, UserDTO.class);
+
+			
+			if(loggedIn.getUsername().equals(u.username) || loggedIn.getRole().equals("Admin")) {
+				User targetUser = uService.findByUsername(u.username);
+				if(targetUser != null) {
+					if(uService.deleteUser(targetUser)) {
+						if(loggedIn.getUsername().equals(u.username)) {
+							out.print("Your account has been deleted. You have automatically been logged out of the application.");
+							resp.setStatus(200);
+							ses.invalidate();
+						}else {
+							out.print(u.username + " has been deleted. RIP");
+							resp.setStatus(200);
+						}
+					}else {
+						out.print("Something went wrong, please try again!");
+						resp.setStatus(400);
+					}
+				}else {
+					out.print("That is not a valid user. Try again!");
+					resp.setStatus(400);
+				}
+				
+			}else {
+				out.print("You can only delete your own account! (unless you are an admin, which you are not)");
 				resp.setStatus(401);
 			}
 		}else {

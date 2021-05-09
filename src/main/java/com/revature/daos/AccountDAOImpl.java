@@ -35,6 +35,7 @@ public class AccountDAOImpl implements AccountDAO {
 				account.setBalance(result.getFloat("balance"));
 				account.setStatus(result.getString("account_status"));
 				account.setAccountType(result.getString("account_type"));
+				account.setInterestRate(result.getDouble("interest_rate"));
 				account.setOwner(result.getInt("account_owner"));
 
 				list.add(account);
@@ -66,6 +67,7 @@ public class AccountDAOImpl implements AccountDAO {
 				account.setBalance(result.getFloat("balance"));
 				account.setStatus(result.getString("account_status"));
 				account.setAccountType(result.getString("account_type"));
+				account.setInterestRate(result.getDouble("interest_rate"));
 				account.setOwner(result.getInt("account_owner"));
 
 				return account;
@@ -81,8 +83,8 @@ public class AccountDAOImpl implements AccountDAO {
 	public boolean addAccount(Account a) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
-			String sql = "INSERT INTO accounts (balance, account_status, account_type, account_owner)"
-					+ "VALUES(?,?,?,?);";
+			String sql = "INSERT INTO accounts (balance, account_status, account_type, interest_rate, account_owner)"
+					+ "VALUES(?,?,?,?,?);";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 
@@ -90,6 +92,7 @@ public class AccountDAOImpl implements AccountDAO {
 			statement.setDouble(++index, a.getBalance());
 			statement.setString(++index, a.getStatus());
 			statement.setString(++index, a.getAccountType());
+			statement.setDouble(++index, a.getInterestRate());
 			statement.setInt(++index, a.getOwner());
 
 			statement.execute();
@@ -123,6 +126,7 @@ public class AccountDAOImpl implements AccountDAO {
 				account.setBalance(result.getFloat("balance"));
 				account.setStatus(result.getString("account_status"));
 				account.setAccountType(result.getString("account_type"));
+				account.setInterestRate(result.getDouble("interest_rate"));
 				account.setOwner(result.getInt("account_owner"));
 
 				list.add(account);
@@ -217,7 +221,7 @@ public class AccountDAOImpl implements AccountDAO {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 
 			String sql = "UPDATE accounts SET " + "balance = ?, " + "account_status = ?, " + "account_type = ?, "
-					+ "account_owner = ? " + "WHERE account_id = " + id + ";";
+					+ "interest_rate = ?, " + "account_owner = ? " + "WHERE account_id = " + id + ";";
 
 			PreparedStatement statement = conn.prepareStatement(sql);
 
@@ -225,6 +229,7 @@ public class AccountDAOImpl implements AccountDAO {
 			statement.setDouble(++index, a.getBalance());
 			statement.setString(++index, a.getStatus());
 			statement.setString(++index, a.getAccountType());
+			statement.setDouble(++index, a.getInterestRate());
 			statement.setInt(++index, a.getOwner());
 
 			statement.execute();
@@ -258,6 +263,7 @@ public class AccountDAOImpl implements AccountDAO {
 				account.setBalance(result.getFloat("balance"));
 				account.setStatus(result.getString("account_status"));
 				account.setAccountType(result.getString("account_type"));
+				account.setInterestRate(result.getDouble("interest_rate"));
 				account.setOwner(result.getInt("account_owner"));
 
 				list.add(account);
@@ -268,6 +274,24 @@ public class AccountDAOImpl implements AccountDAO {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean deleteAccount(Account a) {
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "DELETE FROM accounts WHERE account_id = " + a.getAccountID() + ";";
+			
+			Statement statement = conn.createStatement();
+			
+			statement.execute(sql);
+			
+			return true;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

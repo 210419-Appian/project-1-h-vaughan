@@ -15,8 +15,12 @@ public interface UserDAO {
 	
 	boolean addUser(User u);
 	
-	boolean registerAccount(double balance, String accountType, User user);
-	
 	boolean updateUser(User u, int id);
+	
+	boolean deleteUser(User targetUser);
+
+	boolean registerCheckingAccount(double balance, User user);
+	
+	boolean registerSavingsAccount(double balance, double interestRate, User user);
 	
 }

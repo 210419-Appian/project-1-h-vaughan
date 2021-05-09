@@ -24,6 +24,9 @@ public class AccountServices {
 	public boolean addAccount(Account a, int owner) {
 		a.setStatus("Pending");
 		a.setOwner(owner);
+		if(a.getAccountType().equals("Checking")) {
+			a.setInterestRate(0);
+		}
 		return aDao.addAccount(a);
 	}
 	
@@ -74,7 +77,23 @@ public class AccountServices {
 		}
 		return false;
 	}
+
+	public boolean deleteAccount(Account targetAccount) {
+		return aDao.deleteAccount(targetAccount);
+	}
 	
-	
+	public void accrueInterest(int months) {
+		List<Account> accounts = findAll();
+		while (months > 0) {
+			for(Account a : accounts) {
+				if(a.getStatus().equals("Open") && a.getAccountType().equals("Savings")) {
+					double interest = a.getBalance()*a.getInterestRate();
+					a.setBalance(a.getBalance() + interest);
+					updateAccount(a, a.getAccountID());
+				}
+			}
+			months--;
+		}
+	}
 	
 }

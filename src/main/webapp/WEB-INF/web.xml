@@ -73,14 +73,23 @@
 		<servlet-name>DepositServlet</servlet-name>
 		<url-pattern>/accounts/deposit</url-pattern>
 	</servlet-mapping>
-	
-		<servlet>
+
+	<servlet>
 		<servlet-name>TransferServlet</servlet-name>
 		<servlet-class>com.revature.servlets.TransferServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TransferServlet</servlet-name>
 		<url-pattern>/accounts/transfer</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PassTimeServlet</servlet-name>
+		<servlet-class>com.revature.servlets.PassTimeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PassTimeServlet</servlet-name>
+		<url-pattern>/accounts/passTime</url-pattern>
 	</servlet-mapping>
 
 </web-app>

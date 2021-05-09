@@ -107,10 +107,10 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	@Override
-	public boolean registerAccount(double balance, String accountType, User user) {
+	public boolean registerCheckingAccount(double balance, User user) {
 		try (Connection conn = ConnectionUtil.getConnection()) {
 			
-			Account newAccount = new Account(balance, "Pending", accountType, user.getUserID());
+			Account newAccount = new Account(balance, "Pending", "Checking", 0.00, user.getUserID());
 			
 			String sql = "INSERT INTO accounts (balance, account_status, account_type, account_owner)" 
 					+ "VALUES(?,?,?,?);";
@@ -133,6 +133,34 @@ public class UserDAOImpl implements UserDAO{
 		return false;
 	}
 
+	@Override
+	public boolean registerSavingsAccount(double balance, double interestRate, User user) {
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			
+			Account newAccount = new Account(balance, "Pending", "Savings", interestRate, user.getUserID());
+			
+			String sql = "INSERT INTO accounts (balance, account_status, account_type, interest_rate, account_owner)" 
+					+ "VALUES(?,?,?,?,?);";
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			int index = 0;
+			statement.setDouble(++index, newAccount.getBalance());
+			statement.setString(++index, newAccount.getStatus());
+			statement.setString(++index, newAccount.getAccountType());
+			statement.setDouble(++index, newAccount.getInterestRate());
+			statement.setInt(++index, newAccount.getOwner());
+			
+			statement.execute();
+			
+			return true;
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	@Override
 	public boolean updateUser(User u, int id) {
 		try(Connection conn = ConnectionUtil.getConnection()){
@@ -196,6 +224,23 @@ public class UserDAOImpl implements UserDAO{
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public boolean deleteUser(User u) {
+		try(Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "DELETE FROM users WHERE user_id = " + u.getUserID() + ";";
+			
+			Statement statement = conn.createStatement();
+			
+			statement.execute(sql);
+			
+			return true;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

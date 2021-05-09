@@ -13,7 +13,9 @@ import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.Account;
+import com.revature.models.AccountDTO;
 import com.revature.models.User;
+import com.revature.models.UserDTO;
 import com.revature.services.AccountServices;
 import com.revature.services.UserServices;
 
@@ -225,4 +227,62 @@ public class AccountServlet extends HttpServlet {
 			resp.setStatus(401);
 		}
 	}
+	
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	PrintWriter out = resp.getWriter();
+		
+		HttpSession ses = req.getSession(false);
+		if(ses != null) {
+			String username = (String) ses.getAttribute("username");
+			User loggedIn = uService.findByUsername(username);
+			
+			StringBuilder sb = new StringBuilder();
+			
+			BufferedReader reader = req.getReader();
+			
+			String line = reader.readLine();
+			
+			while(line != null) {
+				sb.append(line);
+				line = reader.readLine();
+			}
+
+			String body = new String(sb); 
+			
+			AccountDTO a = om.readValue(body, AccountDTO.class);
+			Account targetAccount = aService.findByID(a.accountID);
+
+			if(targetAccount != null) {
+				if(loggedIn.getUserID() == targetAccount.getOwner() || loggedIn.getRole().equals("Admin")) {
+
+					if(aService.deleteAccount(targetAccount)) {
+						if(loggedIn.getUserID() == targetAccount.getOwner()) {
+							out.print("Your account, Account #" + a.accountID + ", has been deleted.");
+							resp.setStatus(200);
+						}else {
+							out.print("Account #" + a.accountID + " has been deleted. RIP");
+							resp.setStatus(200);
+						}
+					}else {
+						out.print("Something went wrong, please try again!");
+						resp.setStatus(400);
+					}
+					
+				}else {
+					out.print("You can only delete your own account! (unless you are an admin, which you are not)");
+					resp.setStatus(401);
+				}
+			}else {
+				out.print("Account #" + a.accountID + " does not exist in the database.");
+				resp.setStatus(404);
+			}
+			
+
+		}else {
+			out.print("Please log in first!");
+			resp.setStatus(401);
+		}
+	}
+	
 }

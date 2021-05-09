@@ -1,11 +1,9 @@
 package com.revature.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.daos.UserDAOImpl;
 import com.revature.models.User;
-import com.revature.throwables.SecurityCheck;
 
 public class UserServices {
 	private static UserDAOImpl uDao = new UserDAOImpl();
@@ -27,9 +25,16 @@ public class UserServices {
 		return uDao.addUser(u);
 	}
 	
-	public boolean registerAccount(double balance, String accountType, User user) {
-		if(balance >= 0 && accountType == "Checking" || accountType == "Savings") {
-			return uDao.registerAccount(balance, accountType, user);
+	public boolean registerAccount(double balance, String accountType, double interestRate, User user) {
+		if(balance >= 0 && interestRate >= 0) {
+			if(accountType.equals("Checking")) {
+				return uDao.registerCheckingAccount(balance, user);
+			}else if(accountType.equals("Savings")) {
+				return uDao.registerSavingsAccount(balance, interestRate, user);
+			}
+			else {
+				return false;
+			}
 		}
 		return false;
 	}
@@ -47,6 +52,10 @@ public class UserServices {
 			return uDao.updateUser(u, id);
 		}
 
+	}
+
+	public boolean deleteUser(User targetUser) {
+		return uDao.deleteUser(targetUser);
 	}
 	
 }
